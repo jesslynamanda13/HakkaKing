@@ -6,12 +6,22 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct HakkaKingApp: App {
     var body: some Scene {
-        WindowGroup {
+        let container = try! ModelContainer(for: Chapter.self, Sentence.self, Word.self, SentenceWord.self)
+        
+        let context = ModelContext(container)
+        
+        if (try? context.fetch(FetchDescriptor<Chapter>()))?.isEmpty ?? true {
+            seedDatabase(context: context)
+        }
+        
+        return WindowGroup {
             ContentView()
+                .modelContainer(container)
         }
     }
 }

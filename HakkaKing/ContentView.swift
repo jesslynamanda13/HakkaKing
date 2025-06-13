@@ -3,22 +3,31 @@
 //  HakkaKing
 //
 //  Created by Amanda on 12/06/25.
+////
+///
 //
-
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    // Display All Chapter
+    @Query(sort: \Chapter.orderIndex) var chapters: [Chapter]
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        // Dicomment aja nanti
+        NavigationStack {
+            List(chapters) { chapter in
+                NavigationLink(destination: SentenceListView(chapter: chapter)) {
+                    VStack(alignment: .leading) {
+                        Text(chapter.chapterName)
+                            .font(.headline)
+                        Text(chapter.chapterDescription)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+            .navigationTitle("Chapters")
         }
-        .padding()
     }
-}
-
-#Preview {
-    ContentView()
 }
