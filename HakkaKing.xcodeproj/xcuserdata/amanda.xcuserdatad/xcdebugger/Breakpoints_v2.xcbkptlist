@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "AB9CC52D-5B6C-4FFF-8A81-E92D3BE89A12"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "BF11F6BB-56E4-47DF-8019-0C4EFAAB0134"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HakkaKing/Feature/Testing/AltPronounciationView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "AltPronunciationView"
+            landmarkType = "14">
+            <Locations>
+               <Location
+                  uuid = "BF11F6BB-56E4-47DF-8019-0C4EFAAB0134 - 3bb9cc6e05f8da45"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "HakkaKing.AltPronunciationView.init() -&gt; HakkaKing.AltPronunciationView"
+                  moduleName = "HakkaKing.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanda/Documents/Apple/HakkaKing/HakkaKing/Feature/Testing/AltPronounciationView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95">
+               </Location>
+               <Location
+                  uuid = "BF11F6BB-56E4-47DF-8019-0C4EFAAB0134 - 88a61fadb398aa94"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "HakkaKing.AltPronunciationView.init(viewModel: @autoclosure () -&gt; HakkaKing.AltAudioViewModel, isRecording: Swift.Bool) -&gt; HakkaKing.AltPronunciationView"
+                  moduleName = "HakkaKing.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/amanda/Documents/Apple/HakkaKing/HakkaKing/Feature/Testing/AltPronounciationView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

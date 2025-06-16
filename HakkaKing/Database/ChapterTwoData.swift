@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 public func seedChapter2(context:ModelContext){
-    var chapter2: Chapter = Chapter(orderIndex: 2, chapterName: "Chapter 2", chapterDescription: "Mama, kamu masak apa?")
+    var chapter2: Chapter = Chapter(orderIndex: 2, chapterName: "Mama, kamu masak apa?", chapterDescription: "Obrolan singkat dengan orang tua saat jam makan.", coverImage: "c2cover")
 
     let sentence1 = Sentence(orderIndex:1, pinyin: "Mak nyi cu mai?", hanzi: "妈妈，你在做什么菜？", translation: "Mama, kamu masak apa?", audioURL: "c2s1.m4a")
     let sentence2 = Sentence(orderIndex:2, pinyin: "Cu choi.", hanzi: "烹饪蔬菜。", translation: "Masak sayur.", audioURL: "c2s2.m4a")

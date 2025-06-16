@@ -15,14 +15,16 @@ class Chapter{
     var chapterName: String
     var chapterDescription: String
     var sentences: [UUID]
+    var coverImage: String
+
     
-    
-    init(orderIndex: Int, chapterName: String, chapterDescription: String) {
+    init(orderIndex: Int, chapterName: String, chapterDescription: String, coverImage: String) {
         self.id = UUID()
         self.orderIndex = orderIndex
         self.chapterName = chapterName
         self.chapterDescription = chapterDescription
         self.sentences = []
+        self.coverImage = coverImage
     }
     
     func addSentence(_ sentenceUUID: UUID){
