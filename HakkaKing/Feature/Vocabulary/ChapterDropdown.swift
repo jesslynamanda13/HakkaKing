@@ -13,7 +13,7 @@ struct ChapterDropdown: View {
     @State private var dropdownLabel: String
     @Binding var selectedChapter: Chapter?
 
-    let lightGrayColor = Color(red: 200/255, green: 200/255, blue: 200/255)
+//    let lightGrayColor = Color(red: 200/255, green: 200/255, blue: 200/255)
 
     var chapters: [Chapter]
 
@@ -28,27 +28,32 @@ struct ChapterDropdown: View {
             HStack {
                 Text(dropdownLabel)
                     .lineLimit(1)
-                    .font(.headline)
-                    .foregroundStyle(Color.black)
+//                    .font(.headline)
+//                    .foregroundStyle(Color.black)
+                    .font(.system(size: 16))
+                    .foregroundColor(.putih)
+                    .padding(.vertical, 10)
                 Spacer()
                 Button(action: {
                     withAnimation {
                         isExpanded.toggle()
                     }
                 }) {
-                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                        .foregroundStyle(Color.yellow)
+//                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+//                        .foregroundStyle(.putih)
+//                        .padding(.trailing, 10)
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
-            .padding(.horizontal, 8)
-            .background(Color.clear)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(lightGrayColor, lineWidth: 1)
-            )
+            .padding(.horizontal, 10)
+            .background(.oren)
+            .cornerRadius(10)
+            .shadow(radius: 0.25, x: 0, y: 3)
+
+//            .overlay(
+//                RoundedRectangle(cornerRadius: 8)
+//                    .stroke(lightGrayColor, lineWidth: 1)
+//            )
 
             if isExpanded {
 //                ScrollView {
@@ -78,7 +83,7 @@ struct ChapterDropdown: View {
                         Text(chapter.chapterName)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding()
-                            .font(.headline)
+                            .font(.system(size: 16))
                             .contentShape(Rectangle())
                             .onTapGesture {
                                 withAnimation {
@@ -87,16 +92,16 @@ struct ChapterDropdown: View {
                                 selectedChapter = chapter
                                 dropdownLabel = chapter.chapterName
                             }
-                            .background(Color.white)
+                            .background(.oren)
 
                         Divider()
                     }
 
                 }
                 .frame(maxHeight: 100)
-                .background(Color.white)
-                .cornerRadius(8)
-                .shadow(radius: 5)
+                .background(.oren)
+                .cornerRadius(10)
+//                .shadow(radius: 5)
                 .transition(.opacity)
                 .zIndex(999)
             }
