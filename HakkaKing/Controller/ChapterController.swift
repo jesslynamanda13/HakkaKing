@@ -39,5 +39,30 @@ class ChapterController {
             return []
         }
     }
+    
+    func fetchWords(chapter: Chapter) -> [Word] {
+        do {
+            let allSentences = try context.fetch(FetchDescriptor<Sentence>())
+            let chapterSentences = allSentences
+                .filter { chapter.sentences.contains($0.id) }
+            
+            let sentenceIDs = chapterSentences.map { $0.id }
+            
+            let allSentenceWords = try context.fetch(FetchDescriptor<SentenceWord>())
+            let relatedSentenceWords = allSentenceWords
+                .filter { sentenceIDs.contains($0.sentenceID) }
+            
+            let wordIDs = Set(relatedSentenceWords.map { $0.wordID })
+            
+            let allWords = try context.fetch(FetchDescriptor<Word>())
+            let words = allWords.filter { wordIDs.contains($0.id) }
+            
+            return words
+        } catch {
+            print("Error fetching words for chapter \(chapter.chapterName): \(error)")
+            return []
+        }
+    }
+
 
 }

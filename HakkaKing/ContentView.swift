@@ -10,24 +10,40 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    // Display All Chapter
-    @Query(sort: \Chapter.orderIndex) var chapters: [Chapter]
-    
     var body: some View {
-        // Dicomment aja nanti
-        NavigationStack {
-            List(chapters) { chapter in
-                NavigationLink(destination: SentenceListView(chapter: chapter)) {
-                    VStack(alignment: .leading) {
-                        Text(chapter.chapterName)
-                            .font(.headline)
-                        Text(chapter.chapterDescription)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
+        TabView {
+            ChapterView()
+                .tabItem {
+                    Image(systemName: "book")
+                    Text("Chapters")
                 }
-            }
-            .navigationTitle("Chapters")
+            
+            
+            VocabularyView()
+                .tabItem {
+                    Image(systemName: "square.text.square")
+                    Text("Vocabulary")
+                }
         }
     }
+    //    // Display All Chapter
+    //    @Query(sort: \Chapter.orderIndex) var chapters: [Chapter]
+    //
+    //    var body: some View {
+    //        // Dicomment aja nanti
+    //        NavigationStack {
+    //            List(chapters) { chapter in
+    //                NavigationLink(destination: SentenceListView(chapter: chapter)) {
+    //                    VStack(alignment: .leading) {
+    //                        Text(chapter.chapterName)
+    //                            .font(.headline)
+    //                        Text(chapter.chapterDescription)
+    //                            .font(.subheadline)
+    //                            .foregroundColor(.secondary)
+    //                    }
+    //                }
+    //            }
+    //            .navigationTitle("Chapters")
+    //        }
+    //    }
 }
