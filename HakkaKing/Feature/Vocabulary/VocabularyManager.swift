@@ -17,10 +17,11 @@ struct VocabularyCardManagerView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 16) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
                 ForEach(words, id: \.id) { word in
                     VocabularyCard(word: word)
                 }
+                .padding(.vertical, 5)
             }
         }
         .onAppear {
