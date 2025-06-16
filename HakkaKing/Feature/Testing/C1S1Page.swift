@@ -79,7 +79,7 @@ struct PronunciationView: View {
     @StateObject var viewModel = AudioViewModel()
     @State var isRecording = false
     
-    let mlModel = try! Chapter1_Sentence1(configuration: MLModelConfiguration()).model
+    let mlModel = try! Chapter1Sentence1(configuration: MLModelConfiguration()).model
     
     var body: some View {
         VStack(spacing: 20) {

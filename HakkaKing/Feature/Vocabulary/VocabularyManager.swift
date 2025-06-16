@@ -5,6 +5,8 @@
 //  Created by Amanda on 13/06/25.
 //
 
+// This file is already correct and needs no changes.
+
 import SwiftUI
 
 struct VocabularyCardManagerView: View {
@@ -25,7 +27,8 @@ struct VocabularyCardManagerView: View {
         }
         .onAppear {
             let controller = ChapterController(context: context)
-            words = controller.fetchWords(chapter: chapter)
+            // This line will now work correctly
+            words = controller.fetchWords(forChapter: chapter)
         }
     }
 }

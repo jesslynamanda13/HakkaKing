@@ -9,11 +9,11 @@ import Foundation
 import SwiftData
 
 @Model
-class SentenceWord{
+final class SentenceWord {
     var id: UUID
     var sentenceID: UUID
     var wordID: UUID
-    var position:Int
+    var position: Int
     
     init(sentenceID: UUID, wordID: UUID, position: Int) {
         self.id = UUID()
