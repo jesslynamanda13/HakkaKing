@@ -10,9 +10,22 @@
 		37D930C92DFAC48800683EEF /* HakkaKing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HakkaKing.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		37B4A4CF2E002AEC00EA7E09 /* Exceptions for "HakkaKing" folder in "HakkaKing" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 37D930C82DFAC48800683EEF /* HakkaKing */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		37D930CB2DFAC48800683EEF /* HakkaKing */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				37B4A4CF2E002AEC00EA7E09 /* Exceptions for "HakkaKing" folder in "HakkaKing" target */,
+			);
 			path = HakkaKing;
 			sourceTree = "<group>";
 		};
@@ -177,6 +190,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need to use the microphone to record your voice.";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -234,6 +248,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We need to use the microphone to record your voice.";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -252,10 +267,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HakkaKing/Preview Content\"";
-				DEVELOPMENT_TEAM = 476954S3MU;
+				DEVELOPMENT_TEAM = F6843B2CZP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = YES;
+				INFOPLIST_FILE = HakkaKing/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "WangHakka needs your microphone";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -282,10 +298,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HakkaKing/Preview Content\"";
-				DEVELOPMENT_TEAM = 476954S3MU;
+				DEVELOPMENT_TEAM = F6843B2CZP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = YES;
+				INFOPLIST_FILE = HakkaKing/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "WangHakka needs your microphone";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

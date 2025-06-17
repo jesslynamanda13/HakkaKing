@@ -14,18 +14,17 @@ final class Sentence {
     var orderIndex: Int
     var pinyin: String
     var hanzi: String
-    var translation: String
-    var audioURL: String?
+    var translation : String
+    var audioURL : String
+    var character:String
     
-    // The inverse relationship back to the parent Chapter
-    var chapter: Chapter?
-    
-    init(orderIndex: Int, pinyin: String, hanzi: String, translation: String, audioURL: String?) {
+    init(orderIndex:Int, pinyin: String, hanzi:String, translation: String, audioURL: String, character: String) {
         self.id = UUID()
         self.orderIndex = orderIndex
         self.pinyin = pinyin
         self.hanzi = hanzi
         self.translation = translation
         self.audioURL = audioURL
+        self.character = character
     }
 }

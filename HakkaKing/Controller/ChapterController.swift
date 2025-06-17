@@ -20,6 +20,18 @@ class ChapterController {
         }
     }
 
+    func fetchChapterSentences(for chapter: Chapter, context: ModelContext) -> [Sentence] {
+        do {
+            let allSentences = try context.fetch(FetchDescriptor<Sentence>(sortBy: [SortDescriptor(\.orderIndex, order: .forward)]))
+            let sentences = allSentences
+                .filter { chapter.sentences.contains($0.id) }
+                .sorted { $0.orderIndex < $1.orderIndex }
+            return sentences
+        } catch {
+            print("Error fetching sentences: \(error)")
+            return []
+        }
+    }
     func fetchSentences(for chapter: Chapter) -> [Sentence] {
         return chapter.sentences?.sorted { $0.orderIndex < $1.orderIndex } ?? []
     }
@@ -45,6 +57,7 @@ class ChapterController {
         // Return the unique words as a sorted array
         return Array(wordsInChapter).sorted { $0.pinyin < $1.pinyin }
     }
+
     
     /// **Function 2: For the PRONUNCIATION PRACTICE screen.**
     /// Fetches the words for a single sentence, in the correct order.
