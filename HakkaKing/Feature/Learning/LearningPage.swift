@@ -53,7 +53,7 @@ struct LearningPage: View {
         }
         .onAppear {
             let controller = ChapterController(context: context)
-            sentences = controller.fetchSentences(for: chapter, context: context)
+            sentences = controller.fetchChapterSentences(for: chapter, context: context)
             recorder.recordingURL = nil
             recorder.setupAudioSession()
             playAudio(fileName: sentences[currentIndex].audioURL)

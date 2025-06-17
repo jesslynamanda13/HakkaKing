@@ -28,7 +28,7 @@ class ChapterController {
         }
     }
 
-    func fetchSentences(for chapter: Chapter, context: ModelContext) -> [Sentence] {
+    func fetchChapterSentences(for chapter: Chapter, context: ModelContext) -> [Sentence] {
         do {
             let allSentences = try context.fetch(FetchDescriptor<Sentence>(sortBy: [SortDescriptor(\.orderIndex, order: .forward)]))
             let sentences = allSentences
