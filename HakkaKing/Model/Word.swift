@@ -9,11 +9,11 @@ import Foundation
 import SwiftData
 
 @Model
-class Word{
-    var id:UUID
-    var pinyin:String
-    var translation:String
-    var audioURL:String?
+final class Word {
+    @Attribute(.unique) var id: UUID
+    var pinyin: String
+    var translation: String
+    var audioURL: String?
     
     init(pinyin: String, translation: String, audioURL: String?) {
         self.id = UUID()

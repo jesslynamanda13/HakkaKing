@@ -9,15 +9,18 @@ import Foundation
 import SwiftData
 
 @Model
-class Sentence{
-    var id : UUID
-    var orderIndex : Int
-    var pinyin : String
+final class Sentence {
+    @Attribute(.unique) var id: UUID
+    var orderIndex: Int
+    var pinyin: String
     var hanzi: String
-    var translation : String
-    var audioURL : String?
+    var translation: String
+    var audioURL: String?
     
-    init(orderIndex:Int, pinyin: String, hanzi:String, translation: String, audioURL: String?) {
+    // The inverse relationship back to the parent Chapter
+    var chapter: Chapter?
+    
+    init(orderIndex: Int, pinyin: String, hanzi: String, translation: String, audioURL: String?) {
         self.id = UUID()
         self.orderIndex = orderIndex
         self.pinyin = pinyin
