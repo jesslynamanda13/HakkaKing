@@ -5,7 +5,6 @@
 //
 //  Created by Marshia on 12/06/25.
 //
-
 import SwiftUI
 import SwiftData
 
@@ -14,10 +13,13 @@ struct ChapterView: View {
     @State private var navigateToVocabView = false
     
     var body: some View {
-        VStack( alignment: .leading, spacing: 16) {
-                
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 16) {
                 HStack {
-                    Image("wanghakka-logo").resizable().scaledToFit().frame(maxWidth: 90)
+                    Image("wanghakka-logo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 90)
                     Spacer()
                     
                     Button(action: {
@@ -44,16 +46,14 @@ struct ChapterView: View {
                     .padding(.top, -8)
                     .padding(.bottom, 4)
                 
-            
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         // Chapter Cards
-                        ForEach(Array(chapters.enumerated()), id: \.1.id) { index, chapter in ChapterCard(chapter: chapter, index: index)
+                        ForEach(Array(chapters.enumerated()), id: \.1.id) { index, chapter in
+                            ChapterCard(chapter: chapter, index: index)
                         }
                         .padding(.bottom, 4)
                     }
-                    
-                    
                 }
             }
             .padding(.horizontal, 32)
@@ -61,10 +61,12 @@ struct ChapterView: View {
             .background(BackgroundView())
             .navigationTitle("")
             .navigationBarHidden(true)
+            // Handle navigation to VocabView if needed
+            .navigationDestination(isPresented: $navigateToVocabView) {
+                // Replace with your VocabView
+                VocabularyView()
+            }
+        }
     }
-}
-
-#Preview {
-    ChapterView()
 }
 

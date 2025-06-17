@@ -15,14 +15,16 @@ class Sentence{
     var pinyin : String
     var hanzi: String
     var translation : String
-    var audioURL : String?
+    var audioURL : String
+    var character:String
     
-    init(orderIndex:Int, pinyin: String, hanzi:String, translation: String, audioURL: String?) {
+    init(orderIndex:Int, pinyin: String, hanzi:String, translation: String, audioURL: String, character: String) {
         self.id = UUID()
         self.orderIndex = orderIndex
         self.pinyin = pinyin
         self.hanzi = hanzi
         self.translation = translation
         self.audioURL = audioURL
+        self.character = character
     }
 }

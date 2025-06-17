@@ -1,9 +1,10 @@
 //
 //  BackgroundView.swift
-//  HakkaKing
+//  HakkaApp
 //
-//  Created by Marshia on 16/06/25.
+//  Created by Marshia on 15/06/25.
 //
+
 
 import SwiftUI
 

@@ -30,15 +30,17 @@ class ChapterController {
 
     func fetchSentences(for chapter: Chapter, context: ModelContext) -> [Sentence] {
         do {
-            let allSentences = try context.fetch(FetchDescriptor<Sentence>())
-            return allSentences
+            let allSentences = try context.fetch(FetchDescriptor<Sentence>(sortBy: [SortDescriptor(\.orderIndex, order: .forward)]))
+            let sentences = allSentences
                 .filter { chapter.sentences.contains($0.id) }
                 .sorted { $0.orderIndex < $1.orderIndex }
+            return sentences
         } catch {
             print("Error fetching sentences: \(error)")
             return []
         }
     }
+
     
     func fetchWords(chapter: Chapter) -> [Word] {
         do {

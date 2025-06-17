@@ -15,6 +15,7 @@ class Chapter{
     var chapterName: String
     var chapterDescription: String
     var sentences: [UUID]
+//    @Relationship var sentences: [Sentence]
     var coverImage: String
 
     
@@ -27,8 +28,8 @@ class Chapter{
         self.coverImage = coverImage
     }
     
-    func addSentence(_ sentenceUUID: UUID){
-        self.sentences.append(sentenceUUID)
-    }
+//    func addSentence(_ sentenceUUID: UUID){
+//        self.sentences.append(sentenceUUID)
+//    }
 }
 

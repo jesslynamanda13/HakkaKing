@@ -10,10 +10,10 @@ import SwiftData
 public func seedChapter2(context:ModelContext){
     var chapter2: Chapter = Chapter(orderIndex: 2, chapterName: "Mama, kamu masak apa?", chapterDescription: "Obrolan singkat dengan orang tua saat jam makan.", coverImage: "c2cover")
 
-    let sentence1 = Sentence(orderIndex:1, pinyin: "Mak nyi cu mai?", hanzi: "妈妈，你在做什么菜？", translation: "Mama, kamu masak apa?", audioURL: "c2s1.m4a")
-    let sentence2 = Sentence(orderIndex:2, pinyin: "Cu choi.", hanzi: "烹饪蔬菜。", translation: "Masak sayur.", audioURL: "c2s2.m4a")
-    let sentence3 = Sentence(orderIndex: 3, pinyin: "An ho shit, nga tu si ki.", hanzi: "太好了，我饿了。", translation: "Enaknya, saya lapar.", audioURL: "c2s3.m4a")
-    let sentence4 = Sentence(orderIndex:4, pinyin: "Shit liau.", hanzi: "请吃饭。", translation: "Silakan makan.", audioURL: "c2s4.m4a")
+    let sentence1 = Sentence(orderIndex:1, pinyin: "Mak nyi cu mai?", hanzi: "妈妈，你在做什么菜？", translation: "Mama, kamu masak apa?", audioURL: "c2s1.m4a", character: "Anak")
+    let sentence2 = Sentence(orderIndex:2, pinyin: "Cu choi.", hanzi: "烹饪蔬菜。", translation: "Masak sayur.", audioURL: "c2s2.m4a", character: "Mama")
+    let sentence3 = Sentence(orderIndex: 3, pinyin: "An ho shit, nga tu si ki.", hanzi: "太好了，我饿了。", translation: "Enaknya, saya lapar.", audioURL: "c2s3.m4a", character: "Anak")
+    let sentence4 = Sentence(orderIndex:4, pinyin: "Shit liau.", hanzi: "请吃饭。", translation: "Silakan makan.", audioURL: "c2s4.m4a", character: "Mama")
     
     // sentence 1
     let mak = Word(pinyin: "mak", translation: "mama", audioURL: "mak.m4a")
