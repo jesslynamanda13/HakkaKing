@@ -1,4 +1,5 @@
 import Foundation
+import SoundAnalysis
 import SwiftData
 import AVFoundation
 import CoreML
@@ -10,6 +11,7 @@ class ChapterController {
         self.context = context
     }
 
+    /// Fetches all chapters from the database, sorted by their order index.
     func fetchChapters() -> [Chapter] {
         let descriptor = FetchDescriptor<Chapter>(sortBy: [SortDescriptor(\.orderIndex)])
         do {
@@ -20,6 +22,35 @@ class ChapterController {
         }
     }
 
+    /// Fetches all sentences for a specific chapter using the UUID array in your Chapter model.
+    func fetchSentences(for chapter: Chapter) -> [Sentence] {
+        do {
+            let allSentences = try context.fetch(FetchDescriptor<Sentence>())
+            
+            // This logic correctly filters sentences based on the UUIDs in chapter.sentences
+            let sentences = allSentences
+                .filter { chapter.sentences.contains($0.id) }
+                .sorted { $0.orderIndex < $1.orderIndex }
+            return sentences
+        } catch {
+            print("Error fetching sentences: \(error)")
+            return []
+        }
+    }
+    
+    /// Fetches all unique words for a given chapter (for the Vocabulary screen).
+    func fetchWords(forChapter chapter: Chapter) -> [Word] {
+        let sentences = self.fetchSentences(for: chapter)
+        var wordsInChapter = Set<Word>()
+
+        for sentence in sentences {
+            let wordsForSentence = self.fetchWords(for: sentence)
+            wordsInChapter.formUnion(wordsForSentence)
+        }
+        
+        return Array(wordsInChapter).sorted { $0.pinyin < $1.pinyin }
+    }
+    
     func fetchChapterSentences(for chapter: Chapter, context: ModelContext) -> [Sentence] {
         do {
             let allSentences = try context.fetch(FetchDescriptor<Sentence>(sortBy: [SortDescriptor(\.orderIndex, order: .forward)]))
@@ -32,35 +63,8 @@ class ChapterController {
             return []
         }
     }
-    func fetchSentences(for chapter: Chapter) -> [Sentence] {
-        return chapter.sentences?.sorted { $0.orderIndex < $1.orderIndex } ?? []
-    }
     
-    //================================================================================
-    // THIS IS THE TWO 'fetchWords' FUNCTIONS. BOTH ARE NEEDED.
-    //================================================================================
-
-    /// **Function 1: For the VOCABULARY screen.**
-    /// Fetches all unique words associated with an entire chapter.
-    func fetchWords(forChapter chapter: Chapter) -> [Word] {
-        var wordsInChapter = Set<Word>()
-        
-        // Get all sentences for the chapter
-        let sentences = self.fetchSentences(for: chapter)
-        
-        // For each sentence, get its words and add them to our set
-        for sentence in sentences {
-            let wordsForSentence = self.fetchWords(for: sentence)
-            wordsInChapter.formUnion(wordsForSentence)
-        }
-        
-        // Return the unique words as a sorted array
-        return Array(wordsInChapter).sorted { $0.pinyin < $1.pinyin }
-    }
-
-    
-    /// **Function 2: For the PRONUNCIATION PRACTICE screen.**
-    /// Fetches the words for a single sentence, in the correct order.
+    /// Fetches the words for a single sentence in their correct order.
     func fetchWords(for sentence: Sentence) -> [Word] {
         do {
             let allSentenceWords = try context.fetch(FetchDescriptor<SentenceWord>())
@@ -75,22 +79,17 @@ class ChapterController {
             }
             return wordsForSentence
         } catch {
-            print("Error fetching words for sentence \(sentence.pinyin): \(error)")
+            print("Error fetching words for sentence: \(sentence.pinyin): \(error)")
             return []
         }
     }
 
     //================================================================================
-    // BACKLOG IMPLEMENTATION REMAINS THE SAME
+    // BACKLOG IMPLEMENTATION: [BE] Create checkPronounciation function
     //================================================================================
 
     @MainActor
-    func checkPronunciation(for sentence: Sentence) async -> (result: [String: Bool]?, error: Error?) {
-        guard let chapter = sentence.chapter else {
-            print("Error: Sentence \(sentence.pinyin) has no associated chapter.")
-            return (nil, NSError(domain: "DataConsistencyError", code: 1001, userInfo: [NSLocalizedDescriptionKey: "Sentence has no chapter"]))
-        }
-        
+    func checkPronunciation(for sentence: Sentence, in chapter: Chapter) async -> (result: [String: Bool]?, error: Error?) {
         let words = fetchWords(for: sentence)
         guard !words.isEmpty else {
             print("No words found for this sentence.")
@@ -98,6 +97,7 @@ class ChapterController {
         }
         let wordPinyins = words.map { $0.pinyin }
         
+        // This now uses the 'chapter' parameter, which is safe.
         guard let model = loadMLModel(chapterIndex: chapter.orderIndex, sentenceIndex: sentence.orderIndex) else {
             print("ML Model not found for Chapter \(chapter.orderIndex) Sentence \(sentence.orderIndex)")
             return (nil, NSError(domain: "ModelLoadingError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Could not load ML Model"]))
@@ -114,6 +114,7 @@ class ChapterController {
         }
     }
     
+    /// Calculates the score from a pronunciation result.
     func evaluateScore(from result: [String: Bool]) -> Double {
         let correctCount = result.values.filter { $0 == true }.count
         let totalCount = result.keys.count
@@ -121,7 +122,8 @@ class ChapterController {
         return (Double(correctCount) / Double(totalCount)) * 100.0
     }
     
-    func loadMLModel(chapterIndex: Int, sentenceIndex: Int) -> MLModel? {
+    /// Loads the correct .mlmodel file based on the chapter and sentence index.
+    private func loadMLModel(chapterIndex: Int, sentenceIndex: Int) -> MLModel? {
         do {
             switch (chapterIndex, sentenceIndex) {
             case (1, 1): return try Chapter1Sentence1(configuration: .init()).model
@@ -145,4 +147,85 @@ class ChapterController {
             return nil
         }
     }
+    
+    // Tambahkan fungsi BARU ini ke dalam class ChapterController Anda
+
+    // Tambahkan fungsi BARU ini ke dalam class ChapterController Anda
+
+    @MainActor
+    func analyzePronunciation(fromAudioFile audioURL: URL, for sentence: Sentence, in chapter: Chapter) async -> (result: [String: Bool]?, error: Error?) {
+        
+        // 1. Siapkan data kata dan model ML
+        let words = fetchWords(for: sentence)
+        guard !words.isEmpty else { return (nil, nil) }
+        let wordPinyins = words.map { $0.pinyin }
+        
+        guard let model = loadMLModel(chapterIndex: chapter.orderIndex, sentenceIndex: sentence.orderIndex) else {
+            return (nil, NSError(domain: "ModelLoadingError", code: 1002))
+        }
+        
+        // 2. Gunakan SNAudioFileAnalyzer untuk menganalisis file audio
+        do {
+            let fileAnalyzer = try SNAudioFileAnalyzer(url: audioURL)
+            let request = try SNClassifySoundRequest(mlModel: model)
+            
+            // Buat observer untuk menangkap hasil analisis
+            let resultsObserver = ResultsObserver(wordsToPractice: wordPinyins)
+            try fileAnalyzer.add(request, withObserver: resultsObserver)
+            
+            // Mulai analisis file
+            try await fileAnalyzer.analyze()
+            
+            // Kembalikan hasil dari observer setelah analisis selesai
+            return (resultsObserver.finalResults, nil)
+            
+        } catch {
+            print("Audio file analysis failed: \(error)")
+            return (nil, error)
+        }
+    }
+
+
+    // Tambahkan class helper KECIL ini di dalam file yang sama (ChapterController.swift), TAPI DI LUAR class ChapterController
+    @MainActor
+    private class ResultsObserver: NSObject, SNResultsObserving {
+        var finalResults: [String: Bool]
+        private let wordsToPractice: [String]
+        private var currentIndex = 0
+
+        init(wordsToPractice: [String]) {
+            self.wordsToPractice = wordsToPractice
+            self.finalResults = Dictionary(uniqueKeysWithValues: wordsToPractice.map { ($0, false) })
+            super.init()
+        }
+
+        func request(_ request: SNRequest, didProduce result: SNResult) {
+            guard let result = result as? SNClassificationResult,
+                  let topClassification = result.classifications
+                    .filter({ $0.identifier != "background_noises" })
+                    .max(by: { $0.confidence < $1.confidence })
+            else { return }
+            
+            // Cek semua kata yang diharapkan
+            for i in 0..<wordsToPractice.count {
+                let expectedWord = wordsToPractice[i]
+                if topClassification.identifier == expectedWord && topClassification.confidence > 0.60 {
+                    if finalResults[expectedWord] == false { // Hanya tandai sekali
+                        print("File Analyser identified: \(expectedWord)")
+                        finalResults[expectedWord] = true
+                    }
+                }
+            }
+        }
+
+        func request(_ request: SNRequest, didFailWithError error: Error) {
+            print("File-based analysis request failed: \(error)")
+        }
+
+        func requestDidComplete(_ request: SNRequest) {
+            print("File analysis complete.")
+        }
+    }
 }
+
+

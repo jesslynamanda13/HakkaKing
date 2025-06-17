@@ -43,7 +43,7 @@ class RecordingController: ObservableObject {
             print("Recording started at \(fileURL).")
 
             // Stop after 7 seconds
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 self.stopRecording()
             }
         } catch {
@@ -53,7 +53,7 @@ class RecordingController: ObservableObject {
 
     func stopRecording() {
         audioRecorder?.stop()
-        recordingURL = audioRecorder?.url 
+        recordingURL = audioRecorder?.url
         isRecording = false
         print("Recording stopped.")
     }

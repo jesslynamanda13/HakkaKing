@@ -9,14 +9,18 @@ import SwiftUI
 
 struct MicrophoneActiveComponent: View {
     @Binding var isRecording: Bool
+    var isAnalyzing: Bool // Tambahkan ini
+
     var body: some View {
-        Button {
-            isRecording = false
-        } label: {
-            Image("mic-record")
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 84)
+        VStack(spacing: 8) {
+            if isAnalyzing {
+                ProgressView()
+                Text("Analyzing...").font(.caption)
+            } else {
+                Button(action: { /* Stop logic is in RecordingController */ }) {
+                    Image("mic-record").resizable().scaledToFit().frame(maxWidth: 84)
+                }
+            }
         }
     }
 }
