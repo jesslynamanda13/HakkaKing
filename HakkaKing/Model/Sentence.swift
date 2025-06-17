@@ -9,10 +9,10 @@ import Foundation
 import SwiftData
 
 @Model
-class Sentence{
-    var id : UUID
-    var orderIndex : Int
-    var pinyin : String
+final class Sentence {
+    @Attribute(.unique) var id: UUID
+    var orderIndex: Int
+    var pinyin: String
     var hanzi: String
     var translation : String
     var audioURL : String

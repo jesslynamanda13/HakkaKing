@@ -9,8 +9,8 @@ import Foundation
 import SwiftData
 
 @Model
-class Chapter{
-    var id: UUID
+final class Chapter {
+    @Attribute(.unique) var id: UUID
     var orderIndex: Int
     var chapterName: String
     var chapterDescription: String
