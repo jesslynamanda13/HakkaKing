@@ -1,3 +1,4 @@
+
 //
 //  EvaluationComponent.swift
 //  HakkaKing
@@ -142,7 +143,7 @@ struct EvaluationComponent: View {
 
                 // --- FIX: Mengisi kembali konten tombol yang hilang ---
                 if attemptCount >= 3 {
-                
+
                     VStack(spacing: 12) {
                         Button(action: onCobaLagi) {
                             Text("Coba lagi yuk")

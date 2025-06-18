@@ -106,5 +106,5 @@ public func seedChapter3(context:ModelContext){
     
     chapter3.sentences = [sentence1.id, sentence2.id, sentence3.id, sentence4.id]
     context.insert(chapter3)
-    
+
 }

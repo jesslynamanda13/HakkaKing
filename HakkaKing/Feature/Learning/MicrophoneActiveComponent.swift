@@ -18,9 +18,7 @@ struct MicrophoneActiveComponent: View {
                 Text("Analyzing...").font(.caption)
             } else {
                 RecordButtonView()
-//                Button(action: { /* Stop logic is in RecordingController */ }) {
-//                    Image("mic-record").resizable().scaledToFit().frame(maxWidth: 84)
-//                }
+
             }
         }
     }
