@@ -87,7 +87,9 @@ class ChapterController {
     //================================================================================
     // BACKLOG IMPLEMENTATION: [BE] Create checkPronounciation function
     //================================================================================
-
+    // CATATAN: Fungsi ini tampaknya untuk analisis real-time, dan mungkin tidak akan diubah banyak
+    // untuk fitur highlight per-kata ini karena kita akan fokus pada analyzePronunciation(fromAudioFile:...)
+    // yang menggunakan ResultsObserver.
     @MainActor
     func checkPronunciation(for sentence: Sentence, in chapter: Chapter) async -> (result: [String: Bool]?, error: Error?) {
         let words = fetchWords(for: sentence)
@@ -148,20 +150,20 @@ class ChapterController {
         }
     }
     
-    // Tambahkan fungsi BARU ini ke dalam class ChapterController Anda
-
-    // Tambahkan fungsi BARU ini ke dalam class ChapterController Anda
-
+    // Ini adalah fungsi utama untuk analisis file audio dan akan dimodifikasi
     @MainActor
     func analyzePronunciation(fromAudioFile audioURL: URL, for sentence: Sentence, in chapter: Chapter) async -> (result: [String: Bool]?, error: Error?) {
         
         // 1. Siapkan data kata dan model ML
         let words = fetchWords(for: sentence)
         guard !words.isEmpty else { return (nil, nil) }
-        let wordPinyins = words.map { $0.pinyin }
+        
+        // Buat daftar pinyin yang "bersih" untuk perbandingan (tanpa kapitalisasi, dll.)
+        // Sesuaikan dengan bagaimana model ML Anda mengenali kata-kata.
+        let wordPinyins = words.map { $0.pinyin.lowercased().trimmingCharacters(in: .punctuationCharacters) }
         
         guard let model = loadMLModel(chapterIndex: chapter.orderIndex, sentenceIndex: sentence.orderIndex) else {
-            return (nil, NSError(domain: "ModelLoadingError", code: 1002))
+            return (nil, NSError(domain: "ModelLoadingError", code: 1002, userInfo: [NSLocalizedDescriptionKey: "Could not load ML Model"]))
         }
         
         // 2. Gunakan SNAudioFileAnalyzer untuk menganalisis file audio
@@ -170,6 +172,7 @@ class ChapterController {
             let request = try SNClassifySoundRequest(mlModel: model)
             
             // Buat observer untuk menangkap hasil analisis
+            // Melewatkan semua kata pinyin yang diharapkan
             let resultsObserver = ResultsObserver(wordsToPractice: wordPinyins)
             try fileAnalyzer.add(request, withObserver: resultsObserver)
             
@@ -185,34 +188,37 @@ class ChapterController {
         }
     }
 
-
-    // Tambahkan class helper KECIL ini di dalam file yang sama (ChapterController.swift), TAPI DI LUAR class ChapterController
+    // Ubah class helper KECIL ini di dalam file yang sama (ChapterController.swift), TAPI DI LUAR class ChapterController
     @MainActor
     private class ResultsObserver: NSObject, SNResultsObserving {
-        var finalResults: [String: Bool]
-        private let wordsToPractice: [String]
-        private var currentIndex = 0
+        var finalResults: [String: Bool] // Ini akan menyimpan status benar/salah untuk setiap kata pinyin
+        private let wordsToPractice: [String] // Daftar kata pinyin yang diharapkan, sudah bersih/lowercase
 
         init(wordsToPractice: [String]) {
             self.wordsToPractice = wordsToPractice
+            // Inisialisasi semua kata sebagai false pada awalnya
             self.finalResults = Dictionary(uniqueKeysWithValues: wordsToPractice.map { ($0, false) })
             super.init()
         }
 
         func request(_ request: SNRequest, didProduce result: SNResult) {
-            guard let result = result as? SNClassificationResult,
-                  let topClassification = result.classifications
-                    .filter({ $0.identifier != "background_noises" })
-                    .max(by: { $0.confidence < $1.confidence })
-            else { return }
+            guard let result = result as? SNClassificationResult else { return }
             
-            // Cek semua kata yang diharapkan
-            for i in 0..<wordsToPractice.count {
-                let expectedWord = wordsToPractice[i]
-                if topClassification.identifier == expectedWord && topClassification.confidence > 0.60 {
-                    if finalResults[expectedWord] == false { // Hanya tandai sekali
-                        print("File Analyser identified: \(expectedWord)")
-                        finalResults[expectedWord] = true
+            // Iterasi melalui semua klasifikasi yang dihasilkan oleh model
+            for classification in result.classifications {
+                // Abaikan background noises
+                if classification.identifier == "background_noises" { continue }
+
+                // Bersihkan identifier dari model jika perlu (misalnya, lowercase)
+                let recognizedIdentifier = classification.identifier.lowercased().trimmingCharacters(in: .punctuationCharacters)
+                
+                // Periksa apakah identifier model cocok dengan salah satu kata yang kita latih
+                if wordsToPractice.contains(recognizedIdentifier) {
+                    // Jika kata ini belum ditandai benar dan confidence-nya tinggi
+                    // Anda bisa menyesuaikan ambang batas kepercayaan (e.g., 0.75)
+                    if finalResults[recognizedIdentifier] == false && classification.confidence > 0.60 {
+                        print("File Analyser identified: \(recognizedIdentifier) with confidence: \(classification.confidence)")
+                        finalResults[recognizedIdentifier] = true
                     }
                 }
             }
@@ -223,10 +229,7 @@ class ChapterController {
         }
 
         func requestDidComplete(_ request: SNRequest) {
-            print("File analysis complete.")
+            print("File analysis complete. Final Results: \(finalResults)")
         }
     }
 }
-
-
-
