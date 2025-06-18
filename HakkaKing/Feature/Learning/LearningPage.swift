@@ -1,7 +1,11 @@
 import SwiftUI
 import SwiftData
 import AVFoundation
+import CoreML
 
+// ===============================================================
+// VIEW UTAMA: LEARNING PAGE
+// ===============================================================
 struct LearningPage: View {
     var chapter: Chapter
     
@@ -15,32 +19,37 @@ struct LearningPage: View {
     @StateObject private var recorder = RecordingController()
     @State private var audioPlayer: AVAudioPlayer?
     
-    // State BARU untuk menampung hasil AI
+    // State BARU untuk hasil analisis ML
     @State private var analysisResult: [String: Bool]?
     @State private var analysisScore: Double?
     @State private var isAnalyzing = false
     
+    // State BARU untuk navigasi ke halaman congrats
+    @State private var showCongratsPage = false
+
     private var controller: ChapterController {
         ChapterController(context: context)
     }
 
     var body: some View {
         ZStack(alignment: .bottom) {
+            // UI Utama Anda
             VStack(spacing: 20) {
                 if !sentences.isEmpty && currentIndex < sentences.count {
+                    let currentSentence = sentences[currentIndex]
                     VStack {
                         VStack(spacing: 24) {
                             HStack(spacing: 8) {
                                 ExitButton()
                                 ProgressBar(progress: currentIndex + 1, total: sentences.count)
                             }
-                            PinyinComponent(sentence: sentences[currentIndex])
+                            PinyinComponent(sentence: currentSentence)
                         }
                         Spacer()
                         
-                        // Logika tombol Anda, dengan tambahan status isAnalyzing
+                        // Tombol Mikrofon sesuai alur Anda
                         if recorder.isRecording || isAnalyzing {
-                            MicrophoneActiveComponent(isRecording: $isRecording, isAnalyzing: isAnalyzing) // Pass isAnalyzing
+                            MicrophoneActiveComponent(isRecording: $isRecording, isAnalyzing: isAnalyzing)
                                 .padding(.bottom, 24)
                         } else if recorder.recordingURL == nil {
                             MicrophoneInactiveComponent(isRecording: $isRecording, recordingController: recorder)
@@ -48,29 +57,56 @@ struct LearningPage: View {
                         }
                     }
                 } else {
-                    Text("All done.")
+                    // Tampilan saat chapter selesai atau loading
+                    if sentences.isEmpty {
+                        ProgressView("Loading...")
+                    } else {
+                        Text("Chapter Selesai!")
+                    }
                 }
             }.padding(.horizontal, 32)
+
+            // Pop-up Evaluasi (hanya muncul setelah analisis selesai)
+            if let result = analysisResult, let score = analysisScore {
+                EvaluationComponent(
+                    sentence: sentences[currentIndex],
+                    score: score,
+                    audioURL: recorder.recordingURL,
+                    onLanjutkan: {
+                        if currentIndex < sentences.count - 1 {
+                            currentIndex += 1
+                        } else {
+                            // Kalimat terakhir selesai, tampilkan halaman congrats
+                            showCongratsPage = true
+                        }
+                        resetStatesAfterEvaluation()
+                    },
+                    onUlangi: {
+                        resetStatesAfterEvaluation()
+                    }
+                )
+                .transition(.move(edge: .bottom))
+            }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(BackgroundView())
+        .navigationTitle("")
+        .navigationBarBackButtonHidden(true)
         .onAppear {
-            let controller = ChapterController(context: context)
-            // Menggunakan nama fungsi yang benar
+            // Menggunakan nama fungsi yang benar dari controller Anda
             sentences = controller.fetchChapterSentences(for: chapter, context: context)
-            recorder.recordingURL = nil
-            recorder.setupAudioSession()
-            // Logika auto-play Anda tetap ada
-            if let firstSentence = sentences.first {
-                playAudio(fileName: firstSentence.audioURL)
+            if !sentences.isEmpty {
+                playAudio(fileName: sentences[currentIndex].audioURL)
             }
         }
         .onChange(of: currentIndex) {
-             // Logika auto-play Anda tetap ada
+            // Fungsionalitas auto-play Anda tetap ada
             if currentIndex < sentences.count {
                 playAudio(fileName: sentences[currentIndex].audioURL)
             }
         }
-        // TAMBAHAN: Ini adalah pemicu untuk analisis AI
         .onChange(of: recorder.recordingURL) { _, newURL in
+            // Ini adalah "lem" yang menghubungkan rekaman dengan analisis AI
             if let url = newURL {
                 Task {
                     isAnalyzing = true
@@ -80,60 +116,38 @@ struct LearningPage: View {
                         self.analysisResult = resultData
                         self.analysisScore = controller.evaluateScore(from: resultData)
                     } else {
-                        print("Analysis task failed: \(error?.localizedDescription ?? "Unknown error")")
-                        self.analysisResult = [:]
+                        print("Analysis task failed: \(error?.localizedDescription ?? "Unknown Error")")
+                        self.analysisResult = [:] // Tampilkan hasil gagal jika ada error
                         self.analysisScore = 0
                     }
                     isAnalyzing = false
                 }
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(BackgroundView())
-        .navigationTitle("")
-        .navigationBarBackButtonHidden(true)
-        
-        // Logika pop-up evaluasi yang sekarang menggunakan hasil AI
-        if let result = analysisResult, let score = analysisScore {
-            EvaluationComponent(
-                sentence: sentences[currentIndex],
-                score: score,
-                audioURL: recorder.recordingURL,
-                onLanjutkan: {
-                    if currentIndex < sentences.count - 1 {
-                        currentIndex += 1
-                    } else {
-                        dismiss()
-                    }
-                    resetStates()
-                },
-                onUlangi: {
-                    resetStates()
-                }
-            )
-            .transition(.move(edge: .bottom))
+        // Navigasi ke halaman Congrats setelah chapter selesai
+        .navigationDestination(isPresented: $showCongratsPage) {
+            CongratsView()
         }
     }
     
-    func resetStates() {
-        recorder.recordingURL = nil
+    func resetStatesAfterEvaluation() {
         analysisResult = nil
         analysisScore = nil
+        recorder.recordingURL = nil
     }
     
     private func playAudio(fileName: String?) {
         guard let fileName = fileName, let url = Bundle.main.url(forResource: fileName, withExtension: nil) else {
-            print("Sentence audio not found")
+            print("Audio file not found")
             return
         }
-        
         do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
             audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.prepareToPlay()
             audioPlayer?.play()
         } catch {
-            print("Failed to play sentence audio: \(error.localizedDescription)")
+            print("Failed to play audio: \(error.localizedDescription)")
         }
     }
 }
-

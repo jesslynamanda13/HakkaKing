@@ -19,7 +19,6 @@ struct EvaluationComponent: View {
                     .offset(y: -40).zIndex(1)
                 
                 VStack(spacing:12){
-                    Text("Kerja Bagus!").font(.title.bold()).padding(.top, 40) // Menambahkan judul
                     Text(sentence.pinyin).font(.title2).fontWeight(.bold)
                     Text("\"\(sentence.translation)\"")
                     
@@ -36,7 +35,7 @@ struct EvaluationComponent: View {
                             .background(Color("Oren")).cornerRadius(15)
                     }
                 }
-                .padding(.top, 72).padding(.horizontal, 32).padding(.bottom)
+                .padding(.top, 72).padding(.horizontal, 32)
                 .frame(maxWidth: .infinity).background(Color("Putih"))
                 .cornerRadius(20).zIndex(0)
             }
@@ -50,7 +49,6 @@ struct EvaluationComponent: View {
                     .offset(y: -40).zIndex(1)
                 
                 VStack(spacing:12){
-                    Text("Silahkan Diulang").font(.title.bold()).padding(.top, 40)
                     Text("Skor Kamu: \(String(format: "%.0f", score))")
                         .font(.headline).foregroundColor(.orange)
                     
@@ -80,7 +78,7 @@ struct EvaluationComponent: View {
                         }
                     }
                 }
-                .padding(.top, 72).padding(.horizontal, 32).padding(.bottom)
+                .padding(.top, 72).padding(.horizontal, 32)
                 .frame(maxWidth: .infinity).background(Color("Putih"))
                 .cornerRadius(20).zIndex(0)
             }

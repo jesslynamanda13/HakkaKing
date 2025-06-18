@@ -123,7 +123,7 @@ class ChapterController {
     }
     
     /// Loads the correct .mlmodel file based on the chapter and sentence index.
-    private func loadMLModel(chapterIndex: Int, sentenceIndex: Int) -> MLModel? {
+    func loadMLModel(chapterIndex: Int, sentenceIndex: Int) -> MLModel? {
         do {
             switch (chapterIndex, sentenceIndex) {
             case (1, 1): return try Chapter1Sentence1(configuration: .init()).model
@@ -227,5 +227,6 @@ class ChapterController {
         }
     }
 }
+
 
 
