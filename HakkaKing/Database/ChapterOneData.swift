@@ -82,6 +82,7 @@ public func seedChapter1(context: ModelContext){
     context.insert(sw2c1s2)
     context.insert(sw3c1s2)
     context.insert(sw4c1s2)
+    context.insert(sw5c1s2)
     
     // Sentence-Word 3
     context.insert(abui)

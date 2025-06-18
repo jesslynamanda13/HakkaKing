@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		37B4A4CF2E002AEC00EA7E09 /* Exceptions for "HakkaKing" folder in "HakkaKing" target */ = {
+		3F3809572E010E1200CFB9F4 /* Exceptions for "HakkaKing" folder in "HakkaKing" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -24,7 +24,7 @@
 		37D930CB2DFAC48800683EEF /* HakkaKing */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				37B4A4CF2E002AEC00EA7E09 /* Exceptions for "HakkaKing" folder in "HakkaKing" target */,
+				3F3809572E010E1200CFB9F4 /* Exceptions for "HakkaKing" folder in "HakkaKing" target */,
 			);
 			path = HakkaKing;
 			sourceTree = "<group>";
@@ -271,7 +271,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HakkaKing/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "WangHakka needs your microphone";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -302,7 +301,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HakkaKing/Info.plist;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "WangHakka needs your microphone";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

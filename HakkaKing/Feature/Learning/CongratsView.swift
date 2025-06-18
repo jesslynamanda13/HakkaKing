@@ -62,3 +62,10 @@ struct CongratsView: View {
     }
 }
 
+#Preview {
+    // Tambahkan NavigationStack di preview agar NavigationLink berfungsi
+    NavigationStack {
+        CongratsView()
+    }
+}
+

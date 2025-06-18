@@ -4,7 +4,7 @@
 //
 //  Created by Amanda on 17/06/25.
 //
-
+//
 import SwiftUI
 import AVFoundation
 import SwiftData
@@ -18,7 +18,7 @@ struct PinyinWordComponent: View {
     @Query private var words: [Word]
     
     @State private var audioPlayer: AVAudioPlayer?
-
+    
     private func word(for sentenceWord: SentenceWord) -> Word? {
         return words.first { $0.id == sentenceWord.wordID }
     }
@@ -34,26 +34,50 @@ struct PinyinWordComponent: View {
             print("Failed to play audio: \(error)")
         }
     }
-    
     var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60), spacing: 1)]){
-            ForEach(sentenceWords
-                    .filter { $0.sentenceID == sentence.id }
-                    .sorted { $0.position < $1.position }
-            ) { sentenceWord in
-                
+        VStack(alignment: .leading) {
+            GeometryReader { geometry in
+                generateWrappedContent(in: geometry)
+            }
+            .frame(maxHeight: 120)
+        }
+
+    }
+    private func generateWrappedContent(in geometry: GeometryProxy) -> some View {
+        var width = CGFloat.zero
+        var height = CGFloat.zero
+
+        let sortedWords = sentenceWords
+            .filter { $0.sentenceID == sentence.id }
+            .sorted { $0.position < $1.position }
+
+        return ZStack(alignment: .topLeading) {
+            ForEach(sortedWords) { sentenceWord in
                 if let word = word(for: sentenceWord) {
                     Text(word.pinyin)
-                        .font(.title3)
+                        .font(.title2)
                         .fontWeight(.bold)
                         .underline()
+                        .padding(4)
+                        .alignmentGuide(.leading, computeValue: { d in
+                            if abs(width - d.width) > geometry.size.width {
+                                width = 0
+                                height -= d.height
+                            }
+                            let result = width
+                            width -= d.width
+                            return result
+                        })
+                        .alignmentGuide(.top, computeValue: { _ in
+                            let result = height
+                            return result
+                        })
                         .onTapGesture {
                             playWordAudio(urlString: word.audioURL)
                         }
-                        .padding(4)
                 }
             }
         }
-        .padding()
     }
+
 }

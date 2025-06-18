@@ -80,7 +80,4 @@ class RecordingController: ObservableObject {
             print("Failed to set up audio session: \(error.localizedDescription)")
         }
     }
-    
-   
-
 }
