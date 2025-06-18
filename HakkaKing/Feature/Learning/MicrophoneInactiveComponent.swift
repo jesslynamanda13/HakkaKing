@@ -5,6 +5,7 @@
 //  Created by Amanda on 16/06/25.
 //
 
+
 import SwiftUI
 struct MicrophoneInactiveComponent: View {
     @Binding var isRecording: Bool
@@ -23,4 +24,5 @@ struct MicrophoneInactiveComponent: View {
         
     }
 }
+
 

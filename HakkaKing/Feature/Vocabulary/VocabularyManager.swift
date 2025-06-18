@@ -15,21 +15,30 @@ struct VocabularyCardManagerView: View {
     
     @State private var words: [Word] = []
 
+    @Binding var searchText: String
+
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 15) {
-                ForEach(words, id: \.id) { word in
+            LazyVGrid(columns: columns, spacing: 15) {
+                ForEach(filteredWords, id: \.id) { word in
                     VocabularyCard(word: word)
                 }
                 .padding(.vertical, 5)
             }
         }
-        .onAppear {
+        .onAppear { fetchWords() }
+        .onChange(of: chapter) { _ in fetchWords() }
+    }
+    
+    private func fetchWords() {
             let controller = ChapterController(context: context)
-            // This line will now work correctly
-            words = controller.fetchWords(forChapter: chapter)
+            words = controller.fetchWordsPerChapter(chapter: chapter)
         }
+    
+    private var filteredWords: [Word] {
+        guard !searchText.isEmpty else { return words }
+        return words.filter { $0.pinyin.localizedCaseInsensitiveContains(searchText) }
     }
 }

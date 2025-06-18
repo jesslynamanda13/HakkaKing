@@ -1,13 +1,13 @@
 import Foundation
 import SwiftData
 public func seedChapter1(context: ModelContext){
-    var chapter1 : Chapter = Chapter(orderIndex: 1, chapterName: "Lama sekali tidak bertemu kamu.", chapterDescription: "Obrolan singkat dengan keluarga besar selama liburan.", coverImage: "c1cover")
-
+    var chapter1 : Chapter = Chapter(orderIndex: 1, chapterName: "Sudah lama tidak bertemu", chapterDescription: "Ngobrol ringan setelah lama tidak bertemu", coverImage: "c1cover")
+    
     let sentence1 = Sentence(orderIndex: 1, pinyin: "An kiu mo nyi to nyi.", hanzi: "好久不见了。", translation: "Lama sekali tidak bertemu kamu.", audioURL: "c1s1.m4a", character: "Paman")
     let sentence2 = Sentence(orderIndex: 2, pinyin: "He wa ngai kin ha cang biong ka.", hanzi: "是的，我现在正在度假。", translation: "Iya, aku baru libur sekarang.", audioURL: "c1s2.m4a", character: "Anak")
     let sentence3 = Sentence(orderIndex: 3, pinyin: "Abui co she?", hanzi: "你在哪里工作?", translation: "Kamu bekerja dimana?", audioURL: "c1s3.m4a", character: "Paman")
     let sentence4 =  Sentence(orderIndex: 4, pinyin: "Ngai han thuk shu. Ha nyian cang thuk chiu.", hanzi: "我还在上大学。明年就毕业了。", translation: "Saya masih kuliah. Tahun depan baru lulus.", audioURL:"c1s4.m4a", character: "Anak")
-
+    
     // sentence 1
     let anKiu = Word(pinyin: "An kiu", translation: "lama sekali", audioURL: "ankiu.m4a")
     let mo = Word(pinyin: "mo", translation: "tidak", audioURL: "mo.m4a")
@@ -31,7 +31,7 @@ public func seedChapter1(context: ModelContext){
     let sw3c1s2 = SentenceWord(sentenceID: sentence2.id, wordID: kinHa.id, position: 2)
     let sw4c1s2 = SentenceWord(sentenceID: sentence2.id, wordID: cang.id, position: 3)
     let sw5c1s2 = SentenceWord(sentenceID: sentence2.id, wordID: biongKa.id, position: 4)
-                     
+    
     
     // sentence 3
     let abui = Word(pinyin: "Abui", translation: "dimana", audioURL: "abui.m4a")
@@ -82,6 +82,7 @@ public func seedChapter1(context: ModelContext){
     context.insert(sw2c1s2)
     context.insert(sw3c1s2)
     context.insert(sw4c1s2)
+    context.insert(sw5c1s2)
     
     // Sentence-Word 3
     context.insert(abui)
@@ -106,4 +107,5 @@ public func seedChapter1(context: ModelContext){
     
     chapter1.sentences = [sentence1.id, sentence2.id, sentence3.id, sentence4.id]
     context.insert(chapter1)
+
 }

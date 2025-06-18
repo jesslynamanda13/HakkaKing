@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 public func seedChapter3(context:ModelContext){
-    var chapter3: Chapter = Chapter(orderIndex: 3, chapterName: "Aku lelah sekali hari ini.", chapterDescription: "Obrolan singkat setelah lelah mengerjakan sesuatu.", coverImage: "c3cover")
+    var chapter3: Chapter = Chapter(orderIndex: 3, chapterName: "Habis ngapain hari ini?", chapterDescription: "Ngobrol dengan papa setelah seharian beraktivitas", coverImage: "c3cover")
     
     let sentence1 = Sentence(orderIndex:1, pinyin: "Ki nyit ngai an hot.", hanzi: "我今天好累啊。", translation: "Aku lelah sekali hari ini.", audioURL: "c3s1.m4a", character: "Anak")
     let sentence2 = Sentence(orderIndex: 2, pinyin: "Nyi co li mai?", hanzi: "你最近都在做什么？", translation: "Kamu habis ngapain?", audioURL:"c3s2.m4a", character: "Ayah")
@@ -106,4 +106,5 @@ public func seedChapter3(context:ModelContext){
     
     chapter3.sentences = [sentence1.id, sentence2.id, sentence3.id, sentence4.id]
     context.insert(chapter3)
+
 }

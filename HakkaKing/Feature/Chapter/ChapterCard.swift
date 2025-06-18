@@ -23,11 +23,11 @@ struct ChapterCard: View {
                     .cornerRadius(15)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Chapter \(chapter.orderIndex)")
-                        .font(.system(size: 14).weight(.bold))
-                        .foregroundColor(.dark)
+//                    Text("Cerita \(chapter.orderIndex):")
+//                        .font(.system(size: 14).weight(.bold))
+//                        .foregroundColor(.dark)
                     Text(chapter.chapterName)
-                        .font(.system(size: 12).weight(.bold))
+                        .font(.system(size: 14).weight(.bold))
                         .foregroundColor(.dark)
                     Text(chapter.chapterDescription)
                         .font(.system(size: 12))
@@ -48,10 +48,19 @@ struct ChapterCard: View {
                                     .font(.system(size: 14).weight(.bold))
                                     .foregroundColor(.putih)
                                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 39)
-                                    .background(.oren)
-                                    .cornerRadius(15)
+                                    .background(
+                                        Color.oren
+                                            .cornerRadius(15)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .stroke(Color.black.opacity(0.25), lineWidth: 2)
+                                                    .blur(radius: 2)
+                                                    .offset(x: 0, y: 2)
+                                                    .mask(RoundedRectangle(cornerRadius: 15).stroke(lineWidth: 2))
+                                            )
+                                    )
                             }
-                            .shadow(color: Color.black.opacity(0.25), radius: 0, x: 0, y: 2)
+
                         }
                         Spacer()
                     }

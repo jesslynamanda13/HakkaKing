@@ -1,4 +1,10 @@
-// File: LearningPage.swift
+
+//
+//  LearningPage.swift
+//  HakkaKing
+//
+//  Created by Amanda on 16/06/25.
+//
 import SwiftUI
 import SwiftData
 import AVFoundation
@@ -7,101 +13,162 @@ struct LearningPage: View {
     var chapter: Chapter
     
     @Environment(\.modelContext) private var context
+    @Environment(\.dismiss) private var dismiss
     
     // State untuk data dan UI
     @State private var sentences: [Sentence] = []
     @State private var currentWords: [Word] = [] // <- Menyimpan daftar kata untuk kalimat saat ini
     @State private var currentIndex = 0
+
+    @State private var isRecording = false
+
     @StateObject private var recorder = RecordingController()
     @State private var audioPlayer: AVAudioPlayer?
+    @State private var showExit = false
     
-    // State untuk hasil analisis ML
+    // State BARU untuk hasil analisis ML
     @State private var analysisResult: [String: Bool]?
     @State private var analysisScore: Double?
     @State private var isAnalyzing = false
     
+    
     // State untuk melacak percobaan & navigasi
     @State private var attemptCount = 0
     @State private var showCongratsPage = false
-
+    
     private var controller: ChapterController {
         ChapterController(context: context)
     }
 
+
     var body: some View {
         ZStack(alignment: .bottom) {
-            // MARK: Main UI
-            VStack(spacing: 20) {
-                if !sentences.isEmpty && currentIndex < sentences.count {
-                    VStack {
-                        VStack(spacing: 24) {
-                            HStack(spacing: 8) {
-                                ExitButton()
-                                ProgressBar(progress: currentIndex + 1, total: sentences.count)
+            if showExit {
+                ZStack{
+                    VStack(spacing: 20) {
+                        if !sentences.isEmpty && currentIndex < sentences.count  {
+                            VStack{
+                                VStack(spacing: 24){
+                                    HStack(spacing: 8){
+                                        ExitButton(showExitModal: $showExit)
+                                        ProgressBar(progress: currentIndex + 1, total: 4)
+                                    }
+                                    
+                                    PinyinComponent(sentence: sentences[currentIndex])
+                                }
+                                Spacer()
+                                if recorder.isRecording || isAnalyzing {
+                                    MicrophoneActiveComponent(isRecording: $isRecording, isAnalyzing: isAnalyzing)
+                                        .padding(.bottom, 24)
+                                } else if recorder.recordingURL == nil {
+                                    MicrophoneInactiveComponent(isRecording: $isRecording, recordingController: recorder)
+                                        .padding(.bottom, 24)
+                                }
                             }
-                            PinyinComponent(sentence: sentences[currentIndex])
+                            
+                        } else {
+                            // Tampilan saat chapter selesai atau loading
+                            if sentences.isEmpty {
+                                ProgressView("Loading...")
+                            } else {
+                                Text("Chapter Selesai!")
+                            }
                         }
-                        Spacer()
-                        
-                        if recorder.isRecording || isAnalyzing {
-                            MicrophoneActiveComponent(isRecording: .constant(recorder.isRecording), isAnalyzing: isAnalyzing)
-                                .padding(.bottom, 24)
-                        } else if recorder.recordingURL == nil {
-                            MicrophoneInactiveComponent(isRecording: .constant(recorder.isRecording), recordingController: recorder)
-                                .padding(.bottom, 24)
-                        }
-                    }
-                } else {
-                    ProgressView()
+                    }.padding(.horizontal, 32)
+                   
+                    ExitModalView(isPresented: $showExit, onExit: {
+                        dismiss()
+                    })
+                    .transition(.opacity)
                 }
             }
-            .padding(.horizontal, 32)
-            .zIndex(0)
-
-            // MARK: Evaluation Pop-up
-            if let score = analysisScore, let result = analysisResult {
-                Color.black.opacity(0.4)
-                    .edgesIgnoringSafeArea(.all)
-                    .zIndex(1)
-
-                EvaluationComponent(
-                    sentence: sentences[currentIndex],
-                    wordsInSentence: currentWords, // <- Kirim data [Word]
-                    score: score,
-                    attemptCount: self.attemptCount,
-                    audioURL: recorder.recordingURL,
-                    analysisResult: result,
-                    onLanjutkan: {
-                        if currentIndex < sentences.count - 1 {
-                            currentIndex += 1
-                        } else {
-                            showCongratsPage = true
+            else{
+                VStack(spacing: 20) {
+                    if !sentences.isEmpty && currentIndex < sentences.count {
+                        VStack {
+                            VStack(spacing: 24) {
+                                HStack(spacing: 8) {
+                                    ExitButton(showExitModal: $showExit)
+                                    ProgressBar(progress: currentIndex + 1, total: sentences.count)
+                                }
+                                PinyinComponent(sentence: sentences[currentIndex])
+                            }
+                            Spacer()
+                            
+                            if recorder.isRecording || isAnalyzing {
+                                MicrophoneActiveComponent(isRecording: .constant(recorder.isRecording), isAnalyzing: isAnalyzing)
+                                    .padding(.bottom, 24)
+                            } else if recorder.recordingURL == nil {
+                                MicrophoneInactiveComponent(isRecording: .constant(recorder.isRecording), recordingController: recorder)
+                                    .padding(.bottom, 24)
+                            }
                         }
-                        resetForNewSentence()
-                    },
-                    onCobaLagi: {
-                        resetForNewAttempt()
-                        recorder.requestPermissionAndRecord()
+                    } else {
+                        ProgressView()
                     }
-                )
-                .zIndex(2)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+                .padding(.horizontal, 32)
+                .zIndex(0)
+                
+                  if let score = analysisScore, let result = analysisResult {
+                      Color.black.opacity(0.4)
+                          .edgesIgnoringSafeArea(.all)
+                          .zIndex(1)
+
+                      EvaluationComponent(
+                          sentence: sentences[currentIndex],
+                          wordsInSentence: currentWords, // <- Kirim data [Word]
+                          score: score,
+                          attemptCount: self.attemptCount,
+                          audioURL: recorder.recordingURL,
+                          analysisResult: result,
+                          onLanjutkan: {
+                              if currentIndex < sentences.count - 1 {
+                                  currentIndex += 1
+                              } else {
+                                  showCongratsPage = true
+                              }
+                              resetForNewSentence()
+                          },
+                          onCobaLagi: {
+                              resetForNewAttempt()
+                              recorder.requestPermissionAndRecord()
+                          }
+                      )
+                      .zIndex(2)
+                      .transition(.move(edge: .bottom).combined(with: .opacity))
+                  }
+
             }
+         
         }
         .animation(.spring(), value: analysisScore != nil)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(BackgroundView())
         .navigationTitle("")
         .navigationBarBackButtonHidden(true)
-        .navigationDestination(isPresented: $showCongratsPage) {
-            CongratsView()
-        }
         .onAppear {
             self.sentences = controller.fetchSentences(for: chapter)
             updateCurrentSentenceData()
+            recorder.recordingURL = nil
+            recorder.setupAudioSession()
+            if !sentences.isEmpty {
+                playAudio(fileName: sentences[currentIndex].audioURL)
+            }
         }
-        .onChange(of: currentIndex) {
-            updateCurrentSentenceData()
+        .onChange(of: currentIndex) { newIndex in
+            if newIndex < sentences.count {
+                let audioFile = sentences[newIndex].audioURL
+                playAudio(fileName: audioFile)
+                updateCurrentSentenceData()
+            }
+                 else {
+                    ProgressView()
+                }
+          
+        }
+        .navigationDestination(isPresented: $showCongratsPage) {
+            CongratsView()
         }
         .onChange(of: recorder.recordingURL) { _, newURL in
             if let url = newURL {

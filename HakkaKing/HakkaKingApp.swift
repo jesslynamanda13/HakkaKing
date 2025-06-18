@@ -20,7 +20,7 @@ struct HakkaKingApp: App {
         }
         
         return WindowGroup {
-            ContentView()
+            SplashScreenView()
                 .modelContainer(container)
         }
     }

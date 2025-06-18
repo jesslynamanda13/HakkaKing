@@ -23,27 +23,30 @@ struct PinyinComponent: View {
                 Button {
                     playAudio(fileName: sentence.audioURL)
                 } label: {
-                    ZStack { // Stack the circle and the icon on top of each other
+                    ZStack {
                         Circle()
                             .fill(Color.orange)
                             .frame(width: 45, height: 45)
-
+                        
                         Image(systemName: "speaker.wave.2.fill")
                             .font(.headline)
-                            .foregroundColor(.white) // this will make the icon WHITE
+                            .foregroundColor(.white)
                     }
                 }
-
-                Text(sentence.pinyin)
-                    .font(.title2)
-                    .fontWeight(.bold)
+                VStack(alignment: .center, spacing: 8){
+                    PinyinWordComponent(sentence: sentence)
+                    Text("\"\(sentence.translation)\"")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.gray.opacity(0.8))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 16)
+                .background(Color.white)
+                .cornerRadius(20)
+                .overlay(RoundedRectangle(cornerRadius: 20)
+                    .stroke(Color("OrangeBorder"), lineWidth: 2))
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
-            .background(Color.white)
-            .cornerRadius(20)
-            .overlay(RoundedRectangle(cornerRadius: 20)
-                .stroke(Color("OrangeBorder"), lineWidth: 2))
+            
             .offset(y: 108)
         }
     }

@@ -5,6 +5,7 @@
 //  Created by Amanda on 16/06/25.
 //
 
+
 import Foundation
 import AVFoundation
 
@@ -79,7 +80,4 @@ class RecordingController: ObservableObject {
             print("Failed to set up audio session: \(error.localizedDescription)")
         }
     }
-    
-   
-
 }

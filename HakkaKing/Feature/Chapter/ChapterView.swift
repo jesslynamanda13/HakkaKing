@@ -16,16 +16,11 @@ struct ChapterView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
-                    Image("wanghakka-logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: 90)
                     Spacer()
-                    
                     Button(action: {
                         navigateToVocabView = true
                     }) {
-                        Image(systemName: "text.book.closed.fill")
+                        Image("vocab-icon")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 28, height: 28)
@@ -56,12 +51,12 @@ struct ChapterView: View {
                     }
                 }
             }
+            .padding(.top, 32)
             .padding(.horizontal, 32)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(BackgroundView())
             .navigationTitle("")
             .navigationBarHidden(true)
-            // Handle navigation to VocabView if needed
             .navigationDestination(isPresented: $navigateToVocabView) {
                 // Replace with your VocabView
                 VocabularyView()

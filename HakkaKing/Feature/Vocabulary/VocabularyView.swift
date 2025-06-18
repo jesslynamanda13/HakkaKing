@@ -8,40 +8,34 @@
 import SwiftUI
 import SwiftData
 
-struct VocabularyView : View{
+struct VocabularyView: View {
     @Query(sort: \Chapter.orderIndex) var chapters: [Chapter]
-    @State private var selectedChapter: Chapter?
-    @State private var navigateToChapterView: Bool = false
+    @State private var searchText = ""
+    @State private var selectedChapterIndex = 0
     
+    @Environment(\.dismiss) private var dismiss
     
-    var body: some View{
+    var selectedChapter: Chapter? {
+        guard chapters.indices.contains(selectedChapterIndex) else { return nil }
+        return chapters[selectedChapterIndex]
+    }
+
+    
+    var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            ZStack{
+            ZStack {
                 HStack {
-                    
-                    // Navigate ke ChapterView()
-                    NavigationLink(destination: ChapterView(), isActive: $navigateToChapterView) {
-                        EmptyView()
-                    }
-                    .hidden()
-                    
-                    //button align right
-                    Spacer()
                     Button(action: {
-                        navigateToChapterView = true
+                        dismiss()
                     }) {
-//                                Image(systemName: "chevron.left")
-                        Image(systemName: "xmark")
+                        Image(systemName: "chevron.backward")
                             .foregroundColor(.dark)
                             .padding(12)
-                            .background(.putih)
+                            .background(Color.white)
                             .clipShape(Circle())
                     }
-                    //button align left
-//                            Spacer()
+                    Spacer()
                 }
-                
-                
                 
                 HStack {
                     Spacer()
@@ -53,27 +47,36 @@ struct VocabularyView : View{
                 }
             }
             
-            Text("Koleksi kata-kata Hakka-Indonesia yang telah kamu pelajari, siap untuk memperkaya wawasan bahasa Hakka kamu.")
+            Text("Koleksi kata-kata Hakka-Indonesia yang sudah kamu pelajari.")
                 .font(.system(size: 14))
                 .foregroundColor(.dark)
                 .multilineTextAlignment(.leading)
-            
-//            ChapterDropdown(selectedChapter: $selectedChapter, chapters: chapters)
-            
+            SearchAndPickerView(
+                        searchText: $searchText,
+                        selectedChapterIndex: $selectedChapterIndex,
+                        chapters: chapters
+                    )
+          
             if let chapter = selectedChapter {
+                
+
                 ScrollView {
-                       VocabularyCardManagerView(chapter: chapter)
-                           .id(chapter.id)
-                   }
+                    VocabularyCardManagerView(chapter: chapter, searchText: $searchText)
+                        .id(chapter.id)
+
+                }
             }
+
         }
+        .padding(.top, 16)
         .padding(.horizontal, 30)
         .onAppear {
-            if selectedChapter == nil{
-                selectedChapter = chapters.first
+            if chapters.isEmpty == false && selectedChapterIndex >= chapters.count {
+                selectedChapterIndex = 0
             }
         }
         .background(BackgroundView())
+        .navigationTitle("")
+        .navigationBarBackButtonHidden(true)
     }
 }
-
