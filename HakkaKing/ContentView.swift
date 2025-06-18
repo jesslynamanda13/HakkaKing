@@ -15,6 +15,6 @@ struct ContentView: View {
             .tabItem {
                 Image(systemName: "book")
                 Text("Chapters")
-            }
+            }.navigationBarHidden(true)
     }
 }

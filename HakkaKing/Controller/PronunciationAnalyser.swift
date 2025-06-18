@@ -47,7 +47,7 @@ class PronunciationAnalyser: NSObject, SNResultsObserving {
         }
     }
 
-    private func startAudioAnalysis() {
+    func startAudioAnalysis() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.record, mode: .measurement, options: .duckOthers)
             try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
@@ -80,7 +80,7 @@ class PronunciationAnalyser: NSObject, SNResultsObserving {
         }
     }
 
-    private func stopAudioAnalysis() {
+    func stopAudioAnalysis() {
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
         try? AVAudioSession.sharedInstance().setActive(false)

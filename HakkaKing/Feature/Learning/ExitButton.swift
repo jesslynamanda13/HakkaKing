@@ -7,12 +7,11 @@
 
 import SwiftUI
 struct ExitButton: View {
-    @Environment(\.dismiss) var dismiss
-    @State private var showAlert = false
+    @Binding var showExitModal: Bool
     
     var body: some View {
         Button {
-            showAlert = true
+            showExitModal = true
         } label: {
             ZStack {
                 Circle()
@@ -25,11 +24,6 @@ struct ExitButton: View {
                     .foregroundColor(.black)
             }
         }
-        .alert("Are you sure you want to exit?", isPresented: $showAlert) {
-            Button("Yes") {
-                dismiss()
-            }
-            Button("Cancel", role: .cancel) { }
-        }
     }
 }
+

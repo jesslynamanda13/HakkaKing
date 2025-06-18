@@ -18,38 +18,38 @@ struct AudioPlayerView: View {
     var body: some View {
         HStack(spacing: 8) {
             Button {
-                isPlaying.toggle()
                 if isPlaying {
-                    playAudio()
-                } else {
                     pauseAudio()
+                } else {
+                    playAudio()
                 }
+                isPlaying.toggle()
             } label: {
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                    .resizable()
-                    .frame(width: 18, height: 18)
-                    .foregroundStyle(.black)
+                    .resizable().frame(width: 18, height: 18).foregroundStyle(.black)
             }
             .padding()
 
             HStack(spacing: 2) {
                 ForEach(0..<40, id: \.self) { i in
-                    let height = Bool.random() ? 10 : 30
+                    let height = CGFloat.random(in: 5...30)
                     Capsule()
                         .fill(Color.black)
-                        .frame(width: 3, height: CGFloat(height))
+                        .frame(width: 3, height: height)
                 }
             }
             .frame(maxWidth: .infinity)
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 8)
-        .frame(maxWidth: 320)
+        .padding(.vertical, 8).padding(.horizontal, 8).frame(maxWidth: 320)
         .background(RoundedRectangle(cornerRadius: 12).stroke(Color("OrangeBorder"), lineWidth: 2))
     }
     
     private func playAudio() {
         do {
+            // FIX: Set audio session category before playing
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
             audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
             audioPlayer?.prepareToPlay()
             audioPlayer?.play()
