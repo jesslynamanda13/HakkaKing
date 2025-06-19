@@ -22,6 +22,7 @@ struct HakkaKingApp: App {
         return WindowGroup {
             SplashScreenView()
                 .modelContainer(container)
+                .preferredColorScheme(.light)
         }
     }
 }
