@@ -23,6 +23,13 @@ struct HighlightedPinyinView: View {
         }
         .frame(height: totalHeight)
     }
+//    private func generateContent(in g: GeometryProxy) -> some View {
+//        FlowLayout(data: words, spacing: 2) { word in
+//            item(for: word)
+//        }
+//        .background(viewHeightReader($totalHeight))
+//    }
+
 
     private func generateContent(in g: GeometryProxy) -> some View {
         var width = CGFloat.zero
@@ -69,7 +76,7 @@ struct HighlightedPinyinView: View {
         guard let isCorrect = lowercasedResult[pinyin.lowercased()] else {
             return .primary
         }
-        return isCorrect ? .green : .red
+        return isCorrect ? .black : .black.opacity(0.5)
     }
     
     // Helper untuk mengukur tinggi konten secara dinamis

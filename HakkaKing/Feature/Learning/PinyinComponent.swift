@@ -35,7 +35,7 @@ struct PinyinComponent: View {
                 }
                 VStack(alignment: .center, spacing: 8){
 //                    PinyinWordComponent(sentence: sentence)
-                    Text(sentence.pinyin).font(.title2)
+                    Text(sentence.pinyin).font(.title2).fontWeight(.bold)
                     Text("\"\(sentence.translation)\"")
                         .font(.subheadline)
                         .foregroundStyle(Color.gray.opacity(0.8))

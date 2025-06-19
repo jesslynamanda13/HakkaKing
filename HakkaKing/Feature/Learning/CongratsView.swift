@@ -17,7 +17,7 @@ struct CongratsView: View {
         // Tidak perlu NavigationStack di sini
         VStack(alignment: .center) {
             Image("congrats")
-                .padding(.bottom, -30)
+                .padding(.bottom, -20)
             
             VStack(alignment: .center, spacing: 20) {
                 Text("Wah, kamu hebat!")
@@ -25,12 +25,12 @@ struct CongratsView: View {
                     .foregroundColor(Color("Dark"))
                     .multilineTextAlignment(.center)
                 
-                Text("Langkah berikutnya, siap menaklukkan dunia Hakka!")
+                Text("Semangat belajarnya patut diacungi jempol.")
                     .font(.system(size: 16))
                     .foregroundColor(Color("Dark"))
                     .multilineTextAlignment(.center)
+                    .padding(.top, -10)
             }
-            .padding(.horizontal, 30)
             .padding(.top, 60)
             
             // NavigationLink yang sudah diperbaiki.
