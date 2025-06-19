@@ -88,11 +88,11 @@ struct EvaluationComponent: View {
     private var imperfectScoreView: some View {
         ZStack(alignment: .top) {
             VStack(spacing: 12) {
-                Text("Skor Kamu: \(String(format: "%.0f", score))")
-                    .font(.headline).foregroundColor(.orange)
-                
-                HighlightedPinyinView(words: wordsInSentence, analysisResult: analysisResult)
-                
+                HStack {
+                    HighlightedPinyinView(words: wordsInSentence, analysisResult: analysisResult).frame(maxWidth: .infinity, alignment: .center).padding(.leading, 48)
+                }
+                .frame(maxWidth: .infinity)
+
                 Text("\"\(sentence.translation)\"")
                     .foregroundColor(.secondary)
                     .padding(.top, 8)

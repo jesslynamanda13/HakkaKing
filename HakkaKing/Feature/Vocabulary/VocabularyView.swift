@@ -30,7 +30,7 @@ struct VocabularyView: View {
                     }) {
                         Image(systemName: "chevron.backward")
                             .foregroundColor(.dark)
-                            .padding(12)
+                            .padding(10)
                             .background(Color.white)
                             .clipShape(Circle())
                     }
@@ -47,8 +47,8 @@ struct VocabularyView: View {
                 }
             }
             
-            Text("Koleksi kata-kata Hakka-Indonesia yang sudah kamu pelajari.")
-                .font(.system(size: 14))
+            Text("Kosakata Hakka-Indonesia yang sudah dipelajari")
+                .font(.system(size: 15))
                 .foregroundColor(.dark)
                 .multilineTextAlignment(.leading)
             SearchAndPickerView(

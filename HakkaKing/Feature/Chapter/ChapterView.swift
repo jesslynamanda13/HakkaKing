@@ -15,31 +15,37 @@ struct ChapterView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        navigateToVocabView = true
-                    }) {
-                        Image("vocab-icon")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 28, height: 28)
-                            .foregroundColor(.oren)
-                            .padding(12)
-                            .background(.orangeBorder)
-                            .clipShape(Circle())
-                            .shadow(color: Color(red: 236/255, green: 202/255, blue: 114/255), radius: 0, x: -2, y: 2)
+                HStack(alignment: .top){
+                    VStack(alignment: .leading, spacing: 5){
+                        Text("Topik Pembelajaran")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.black)
+                        
+                        Text("Kamu bisa belajar dengan topik seru seputar kegiatan keseharian")
+                            .font(.system(size: 16))
+                            .foregroundColor(.black)
+                            .padding(.bottom,10)
                     }
+                    .padding(.trailing, 8)
+                    Spacer()
+                    VStack{
+                        Button(action: {
+                            navigateToVocabView = true
+                        }) {
+                            Image("vocab-icon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                                .foregroundColor(.oren)
+                                .padding(12)
+                                .background(.orangeBorder)
+                                .clipShape(Circle())
+                                .shadow(color: Color(red: 236/255, green: 202/255, blue: 114/255), radius: 0, x: -2, y: 2)
+                        }
+                    }
+                    
                 }
-                Text("Ayo mulai belajar!")
-                    .font(.system(size: 30, weight: .bold))
-                    .foregroundColor(.black)
                 
-                Text("Mulai perjalananmu belajar bahasa Hakka-Indonesia dengan berbagai topik seru.")
-                    .font(.system(size: 16))
-                    .foregroundColor(.black)
-                    .padding(.top, -8)
-                    .padding(.bottom, 4)
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
@@ -49,7 +55,7 @@ struct ChapterView: View {
                         }
                         .padding(.bottom, 4)
                     }
-                }
+                }.padding(.top, 8)
             }
             .padding(.top, 32)
             .padding(.horizontal, 32)
