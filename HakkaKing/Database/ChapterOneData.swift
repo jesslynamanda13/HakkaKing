@@ -24,7 +24,7 @@ public func seedChapter1(context: ModelContext){
     let ngai = Word(pinyin: "ngai", translation: "saya", audioURL: "ngai.m4a")
     let kinHa = Word(pinyin: "kin ha", translation: "sekarang", audioURL: "kinha.m4a")
     let cang = Word(pinyin: "cang", translation: "baru", audioURL: "cang.m4a")
-    let biongKa = Word(pinyin: "biong ka", translation: "libur", audioURL: "biong.m4a")
+    let biongKa = Word(pinyin: "biong ka", translation: "libur", audioURL: "biongka.m4a")
     
     let sw1c1s2 = SentenceWord(sentenceID: sentence2.id, wordID: heWa.id, position: 0)
     let sw2c1s2 = SentenceWord(sentenceID: sentence2.id, wordID: ngai.id, position: 1)

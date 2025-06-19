@@ -34,7 +34,7 @@ public func seedChapter3(context:ModelContext){
     let sw4c3s2 = SentenceWord(sentenceID: sentence2.id, wordID: mai.id, position: 3)
     
     // sentence 3
-    let chaAm = Word(pinyin: "cha am", translation: "saya tidak", audioURL: "chaam.m4a")
+    let chaAm = Word(pinyin: "cha am", translation: "semalam", audioURL: "chaam.m4a")
     let mo = Word(pinyin: "mo", translation: "waktu", audioURL: "mo.m4a")
     let soiMuk = Word(pinyin: "soi muk", translation: "tidur", audioURL: "soimuk.m4a")
     let shangshe = Word(pinyin: "shang she", translation: "dan", audioURL: "shangshe.m4a")

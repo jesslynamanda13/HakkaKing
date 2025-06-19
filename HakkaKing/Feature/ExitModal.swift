@@ -46,7 +46,7 @@ struct ExitModalView: View {
                         .fontWeight(.semibold)
                         .foregroundColor(.black)
                     
-                    Text("Kamu cuma perlu 1 menit untuk\nmenyelesaikan ini!")
+                    Text("Tinggal sedikit lagi loh...")
                         .font(.custom("SF Pro", size: 16))
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
