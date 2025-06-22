@@ -32,28 +32,6 @@ Inspired by the heartwarming story of someone who couldn’t communicate with hi
 
 ---
 
-## 🧠 Technical Architecture
-
-> The app is structured using clean MVVM principles.  
-> Project architecture includes:
-
-├── Controller/
-├── Database/
-├── Feature/
-├── Mlmodel/ ← Custom-trained Create ML models (.mlmodel)
-├── Model/
-├── SwiftUI Views:
-│ ├── ContentView.swift
-│ ├── WordBubbleView.swift
-│ ├── HakkaPracticeFlow.swift
-│ └── WrappingHStack.swift
-└── HakkaKingApp.swift
-
-
-🔧 *Built 100% using SwiftUI and Apple’s native tools. No third-party ML frameworks were required.*
-
----
-
 ## 🎯 The ML Journey
 
 - 🔍 **Data Scarcity? No Problem!**
